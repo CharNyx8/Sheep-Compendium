@@ -35,3 +35,15 @@ def update_sheep(id: int, sheep: Sheep):
     # Update the sheep record
     db.data[id] = sheep
     return sheep
+
+@app.delete("/sheep/{id}", response_model=list[Sheep])
+def delete_sheep(id: int):
+    # Check that the sheep exists before trying to delete it
+    if id not in db.data:
+        raise HTTPException(status_code=400, detail="Sheep with this ID does not exist")
+
+    # Remove the sheep from the database
+    db.data.pop(id)
+
+    # Return the full remaining list of sheep
+    return list(db.data.values())

@@ -76,3 +76,21 @@ def test_update_sheep():
 
     # Verify that the sheep are updated in the database by retrieving it again
     assert response.json() == sheep_data_name
+
+def test_delete_sheep():
+    # Send a DELETE request to the endpoint "/sheep/3"
+    response = client.delete("/sheep/3")
+
+    # Assert that the response status code is 200 (OK)
+    assert response.status_code == 200
+
+    # Assert that the response JSON is the remaining list of sheep
+    remaining_sheep = response.json()
+    assert isinstance(remaining_sheep, list)
+
+    # Assert that the deleted sheep (id 3) is no longer in the list
+    assert all(sheep["id"] != 3 for sheep in remaining_sheep)
+
+    # Verify that the sheep was actually removed by trying to retrieve it
+    get_response = client.get("/sheep/3")
+    assert get_response.status_code == 404
