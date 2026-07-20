@@ -6,7 +6,10 @@ app = FastAPI()
 
 @app.get("/sheep/{id}", response_model=Sheep)
 def read_sheep(id: int):
-    return db.get_sheep(id)
+    sheep = db.get_sheep(id)
+    if sheep is None:
+        raise HTTPException(status_code=404, detail="Sheep with this ID does not exist")
+    return sheep
 
 @app.post("/sheep", response_model=Sheep, status_code=status.HTTP_201_CREATED) # Status code 201
 def add_sheep(sheep: Sheep):
