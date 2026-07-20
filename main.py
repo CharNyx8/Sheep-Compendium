@@ -22,3 +22,13 @@ def add_sheep(sheep: Sheep):
 def read_all_sheep():
     # Return every sheep currently stored in the database
     return list(db.data.values())
+
+@app.put("/sheep/{id}", response_model=Sheep)
+def update_sheep(id: int, sheep: Sheep):
+    # Check that the sheep exists before trying to update it
+    if id not in db.data:
+        raise HTTPException(status_code=400, detail="Sheep with this ID does not exist")
+
+    # Update the sheep record
+    db.data[id] = sheep
+    return sheep

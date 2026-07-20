@@ -58,3 +58,21 @@ def test_read_all_sheep():
 
     # Assert that the usual sheep are present (6 + any added during testing)
     assert len(response.json()) >= 6
+
+def test_update_sheep():
+    # Prepare the updated sheep data in a dictionary format
+    sheep_data_name = {
+        "id": 2,
+        "name": "Blondie",
+        "breed": "Polypay",
+        "sex": "wether" # changed from "ram" to "wether" (castrated male sheep) to confirm update took effect
+    }
+
+    # Send a PUT request to the endpoint "/sheep/2" with the updated sheep data
+    response = client.put("/sheep/2", json=sheep_data_name)
+
+    # Assert that the response status is 200 (OK)
+    assert response.status_code == 200
+
+    # Verify that the sheep are updated in the database by retrieving it again
+    assert response.json() == sheep_data_name
