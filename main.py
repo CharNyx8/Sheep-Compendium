@@ -17,3 +17,8 @@ def add_sheep(sheep: Sheep):
     # Add the new sheep to the database
     db.data[sheep.id] = sheep
     return sheep # Return the newly added sheep data
+
+@app.get("/sheep", response_model=list[Sheep])
+def read_all_sheep():
+    # Return every sheep currently stored in the database
+    return list(db.data.values())

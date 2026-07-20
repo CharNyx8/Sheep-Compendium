@@ -24,6 +24,7 @@ def test_read_sheep():
         "sex": "ewe"
     }
 
+# Define a test function for creating a sheep
 def test_add_sheep():
     # Prepare the new sheep data in a dictionary form
     sheep_data_name = {
@@ -43,3 +44,17 @@ def test_add_sheep():
     # Verify that the sheep was actually added to the database by retrieving the new sheep
     get_response = client.get(f"/sheep/{sheep_data_name['id']}")
     assert get_response.json()["name"] == sheep_data_name["name"]
+
+# Define a test function for reading all sheep
+def test_read_all_sheep():
+    # Send a GET request to the endpoint "/sheep"
+    response = client.get("/sheep")
+
+    # Assert that the response status code is 200 (OK)
+    assert response.status_code == 200
+
+    # Assert that the response is a list
+    assert isinstance(response.json(), list)
+
+    # Assert that the usual sheep are present (6 + any added during testing)
+    assert len(response.json()) >= 6
